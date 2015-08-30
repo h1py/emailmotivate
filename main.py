@@ -11,6 +11,7 @@ parser = argparse.ArgumentParser(description="Heya! A mail to motivate")
 parser.add_argument("one")
 parser.add_argument("two")
 parser.add_argument("three")
+parser.add_argument("four")
 
 
 args = parser.parse_args()
@@ -18,10 +19,10 @@ args = parser.parse_args()
 to_email = args.one
 from_email = args.two
 password = args.three
-
+subreddit = args.four
 
 r = praw.Reddit(user_agent='pushq')
-submissions = r.get_subreddit('GetMotivated').get_top(limit=1)
+submissions = r.get_subreddit(subreddit).get_top(limit=1)
 
 for top in submissions:
     top_link = top.url
