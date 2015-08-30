@@ -3,30 +3,39 @@ __author__ = 'h1py'
 
 import os
 import praw
+import smtplib
+from email.mime.text import MIMEText
+import argparse
+
+parser = argparse.ArgumentParser(description="Heya! A mail to motivate")
+parser.add_argument("one")
+parser.add_argument("two")
+parser.add_argument("three")
+
+
+args = parser.parse_args()
+
+to_email = args.one
+from_email = args.two
+password = args.three
+
 
 r = praw.Reddit(user_agent='pushq')
-
 submissions = r.get_subreddit('GetMotivated').get_top(limit=1)
 
 for top in submissions:
-     one = top.url
-     title = top.title
-
-one = one + "\n\n Sends the top post of r/Getmotivated at this time everyday."
+    top_link = top.url
+    title = top.title
 
 
-#Import smtplib for the actual sending function
-import smtplib
-
-#Import the email modules we'll need
-from email.mime.text import MIMEText
+top_link += "\n\n Sends the top post of r/Getmotivated at this time everyday."
 
 
-msg = MIMEText(one)
+msg = MIMEText(top_link)
 msg['Subject'] = '%s' % title
-msg['From'] = "mymail@gmail.com"
-msg['Reply-to'] = "mymail@gmail.com"
-msg['To'] = "yourmail@gmail.com"
+msg['From'] = from_email
+msg['Reply-to'] = from_email
+msg['To'] = to_email
 
 
 
@@ -34,6 +43,7 @@ server = smtplib.SMTP('smtp.gmail.com',587) #port 465 or 587
 server.ehlo()
 server.starttls()
 server.ehlo()
-server.login('mymail@gmail.com','password')
-server.sendmail('yourmail@gmail.com','mymail@gmail.com',msg.as_string())
+server.login(from_email, password)
+server.sendmail(from_email, to_email, msg.as_string())
 server.close()
+
