@@ -33,7 +33,7 @@ top_link += "\n\n Sends the top post of r/Getmotivated at this time everyday."
 
 
 msg = MIMEText(top_link)
-msg['Subject'] = '%s' % title
+msg['Subject'] = title
 msg['From'] = from_email
 msg['Reply-to'] = from_email
 msg['To'] = to_email
